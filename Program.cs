@@ -1,12 +1,22 @@
 ﻿using System.Xml.Linq;
 
 List<TeamMember> teamMembers = new List<TeamMember>();
-Random random = new Random();
-int luckValue = random.Next(-10, 11);
-int heistDifficulty = 100 + luckValue;
 
 Console.WriteLine("Plan Your Heist!");
 bool done = false;
+
+int heistDifficulty = 100;
+Console.WriteLine("Enter Bank difficulty:");
+while (!int.TryParse(Console.ReadLine(), out heistDifficulty))
+{
+    Console.WriteLine("Enter a valid figure");
+}
+
+Random random = new Random();
+int luckValue = random.Next(-10, 11);
+
+int successfulRuns = 0;
+int failedRuns = 0;
 
 while (!done)
 {
@@ -42,24 +52,31 @@ while (!done)
 
 Console.WriteLine($"You have {teamMembers.Count} team members");
 
-DetermineSuccess();
+runScenarios();
+Console.WriteLine(@$"Successful runs: {successfulRuns}
+Failed runs: {failedRuns}");
+
+//DetermineSuccess();
 //DisplayTeamMembers();
 void DetermineSuccess()
 {
     if (teamMembers.Count != 0)
     {
         int teamSkillLevel = teamMembers.Sum(p => p.SkillLevel);
+        
 
         Console.WriteLine($"The team's combined skill level is {teamSkillLevel}");
-        Console.WriteLine($"The bank's difficulty level is {heistDifficulty}");
+        Console.WriteLine($"The bank's difficulty level is {heistDifficulty + luckValue}");
 
-        if (teamSkillLevel >= heistDifficulty)
+        if (teamSkillLevel >= (heistDifficulty + luckValue))
         {
             Console.WriteLine("Heist Successful");
+            successfulRuns += 1;
         }
         else
         {
             Console.WriteLine("Heist Failed");
+            failedRuns += 1;
         }
     }
     else
@@ -83,4 +100,23 @@ void DisplayTeamMembers()
         Console.WriteLine("You need to recruit some.");
     }
 
+}
+
+void runScenarios()
+{
+    Console.WriteLine("Enter the number of trial runs:");
+    int trialRuns = 0;
+
+    while (!int.TryParse(Console.ReadLine(), out trialRuns))
+    {
+        Console.WriteLine("Enter a valid figure");
+    }
+
+    for (int i = 0; i < trialRuns; i++)
+    {
+        Console.WriteLine($"Trial {i + 1}");
+        luckValue = random.Next(-10, 11);
+        DetermineSuccess();
+        Console.WriteLine("");
+    }
 }
