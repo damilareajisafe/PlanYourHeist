@@ -1,8 +1,9 @@
 ﻿using System.Xml.Linq;
 
 List<TeamMember> teamMembers = new List<TeamMember>();
-
-int heistDifficulty = 100;
+Random random = new Random();
+int luckValue = random.Next(-10, 11);
+int heistDifficulty = 100 + luckValue;
 
 Console.WriteLine("Plan Your Heist!");
 bool done = false;
@@ -40,6 +41,7 @@ while (!done)
 }
 
 Console.WriteLine($"You have {teamMembers.Count} team members");
+
 DetermineSuccess();
 //DisplayTeamMembers();
 void DetermineSuccess()
@@ -47,6 +49,9 @@ void DetermineSuccess()
     if (teamMembers.Count != 0)
     {
         int teamSkillLevel = teamMembers.Sum(p => p.SkillLevel);
+
+        Console.WriteLine($"The team's combined skill level is {teamSkillLevel}");
+        Console.WriteLine($"The bank's difficulty level is {heistDifficulty}");
 
         if (teamSkillLevel >= heistDifficulty)
         {
