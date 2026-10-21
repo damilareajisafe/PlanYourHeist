@@ -2,6 +2,8 @@
 
 List<TeamMember> teamMembers = new List<TeamMember>();
 
+int heistDifficulty = 100;
+
 Console.WriteLine("Plan Your Heist!");
 bool done = false;
 
@@ -37,11 +39,32 @@ while (!done)
     });
 }
 
-DisplayTeamMembers();
+Console.WriteLine($"You have {teamMembers.Count} team members");
+DetermineSuccess();
+//DisplayTeamMembers();
+void DetermineSuccess()
+{
+    if (teamMembers.Count != 0)
+    {
+        int teamSkillLevel = teamMembers.Sum(p => p.SkillLevel);
+
+        if (teamSkillLevel >= heistDifficulty)
+        {
+            Console.WriteLine("Heist Successful");
+        }
+        else
+        {
+            Console.WriteLine("Heist Failed");
+        }
+    }
+    else
+    {
+        Console.WriteLine("You need to recruit some.");
+    }
+}
 
 void DisplayTeamMembers()
 {
-    Console.WriteLine($"You have {teamMembers.Count} team members");
     if (teamMembers.Count != 0)
     {
         Console.WriteLine(@$"Your team members include:");
